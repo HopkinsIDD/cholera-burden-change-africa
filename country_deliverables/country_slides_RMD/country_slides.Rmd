@@ -78,6 +78,7 @@ sf::sf_use_s2(FALSE)
 
 ```
 
+
 ## Introduction
 Our project aims to produce continent-wide maps of mean annual incidence of suspected cholera cases across Africa from 2011-2020.\
                                                                                                                                     
@@ -151,6 +152,7 @@ B) Panel B shows the distribution of district-level population living in a given
 
 :::
 
+
 ## Figure 4 Stability of risk classification across 2011-2015 and 2016-2020
 ```{r, endemicity maps, echo=FALSE,out.width="30%"}
 knitr::include_graphics(path = file.path(opt$continent_map_dir,'postprocessing_fig_4.png'))
@@ -158,7 +160,7 @@ knitr::include_graphics(path = file.path(opt$continent_map_dir,'postprocessing_f
 
 ::: notes
 Figure 4. Stability of risk classification in Africa across 2011-2010
-This set of figures aim to show the stability of cholera risk classification of the second-level administrative districts across 2011-2015 and 2016-2020. There are four cholera risk categories, including “High-both” (districts were assigned to a high risk category of >10 per 100,000 in both periods), “High-either” (districts were assigned to a high risk category of >10 per 100,000 in exactly one period), “Low-both” (districts were assigned to a low risk category of <1 per 100,000 in both periods), and “Mix” (districts had a moderate risk category of >1 and <10 per 100,000 in both periods or a moderate and low risk category in one period each).
+This set of figures aim to show the stability of cholera risk classification of the second-level administrative districts across 2011-2015 and 2016-2020. There are four cholera risk categories, including “sustained high risk” (districts were assigned to a high risk category of >10 per 100,000 in both periods), “history of high risk” (districts were assigned to a high risk category of >10 per 100,000 in exactly one period), “sustained low risk” (districts were assigned to a low risk category of <1 per 100,000 in both periods), and “history of moderate risk” (districts had a moderate risk category of >1 and <10 per 100,000 in both periods or a moderate and low risk category in one period each).
 
 A) Panel A shows the stability of cholera risk category for districts where we have high confidence in assigning them into high or low risk incidence rate categories across 2011-2015 and 2016-2020 periods.
 B) Panel B shows the 2020 population living in second-level administrative districts in a given high confidence stability category across 2011-2015 and 2016-2020 periods.
@@ -636,7 +638,7 @@ fig6 <- mai_change_adm %>%
 
 ggsave(fig6,
        file = "fig6.png",
-       width = 6,
+       width = 10,
        height = 6, 
        dpi = 300)
 ```
@@ -905,8 +907,13 @@ endemicity_df_v2 <- risk_pop_adm2 %>%
     ),
     pop = max(pop)
   ) %>% 
-  mutate(endemicity = factor(endemicity, levels = c("high-both", "high-either",
-                                                    "mix", "low-both")))  %>% 
+  mutate(endemicity = factor(endemicity, 
+                             levels = c("high-both", "high-either",
+                                        "mix", "low-both"),
+                             labels = c("sustained high risk", 
+                                        "history of high risk",
+                                        "history of moderate risk",
+                                        "sustained low risk"))) %>% 
   subset(country == country_iso)
 
 # Figure
@@ -926,7 +933,7 @@ fig10 <- endemicity_df_v2 %>%
 
 ggsave(fig10,
        file = "fig10.png",
-       width = 6,
+       width = 10,
        height = 6, 
        dpi = 300)
 
@@ -939,7 +946,7 @@ knitr::include_graphics( "fig10.png")
 
 ::: notes
 Figure 10. Stability of risk classification in  `r country_full_name` across 2011-2010
-This set of figures aim to show the stability of cholera risk classification of the second-level administrative districts across 2011-2015 and 2016-2020 in  `r country_full_name`. There are four cholera risk categories, including “High-both” (districts were assigned to a high risk category of >10 per 100,000 in both periods), “High-either” (districts were assigned to a high risk category of >10 per 100,000 in exactly one period), “Low-both” (districts were assigned to a low risk category of <1 per 100,000 in both periods), and “Mix” (districts had a moderate risk category of >1 and <10 per 100,000 in both periods or a moderate and low risk category in one period each). The color shows the stability of cholera risk category for districts where we have high confidence in assigning them into high or low risk incidence rate categories across 2011-2015 and 2016-2020 periods. The names of first-level administrative units are also shown in the maps.
+This set of figures aim to show the stability of cholera risk classification of the second-level administrative districts across 2011-2015 and 2016-2020 in  `r country_full_name`. There are four cholera risk categories, including “sustained high risk” (districts were assigned to a high risk category of >10 per 100,000 in both periods), “history of high risk” (districts were assigned to a high risk category of >10 per 100,000 in exactly one period), “sustained low risk” (districts were assigned to a low risk category of <1 per 100,000 in both periods), and “history of moderate risk” (districts had a moderate risk category of >1 and <10 per 100,000 in both periods or a moderate and low risk category in one period each). The color shows the stability of cholera risk category for districts where we have high confidence in assigning them into high or low risk incidence rate categories across 2011-2015 and 2016-2020 periods. The names of first-level administrative units are also shown in the maps.
 
 :::
 
@@ -1023,6 +1030,17 @@ Table 2. Number of data points by year for `r country_full_name`
 This table summarizes the number of data points (observations) for each year covered by national, first-level administrative units and second-level administrative units.
 :::
 
+
+```{r, public OC ids, echo=FALSE, message=FALSE, warning=FALSE,results='hide'}
+public_oc <- read.csv('/home/cholerapipelinerestmp/OC_modeled.csv') %>% filter(country == country_iso & public)
+```
+
+## Publicly available data input
+
+The detailed information about the publicly available data input can be found on our public [cholera taxonomy database website](https://cholera-taxonomy.middle-distance.com/observation_collections). Here is a list of unique identifiers for the publicly available data input:\
+
+"`r paste(sort(public_oc$OC_UID),collapse = ',')`"
+
 # Part 4. Model Fit for `r country_full_name`
 
 ## Figure 12. Observed cases versus modeled cases across 2011-2015 and 2016-2020
@@ -1057,34 +1075,9 @@ ggsave(fig12,
 knitr::include_graphics( "fig12.png")
 ```
 
+
 ::: notes
 Figure 12. Observed cases versus modeled cases across 2011-2015 and 2016-2020. 
 
 Model validation for full (not time-censored) observations at the country, admin 1, and admin 2 level for the two periods on the log scale. Modeled case estimates show the mean (point) and 95% prediction interval (line). The model fits the  data well if the prediction interval crosses the one-to-one diagonal line for 95% of the observations.”
 :::
-
-```{r,  cases by admin unit, echo=FALSE,message=FALSE,warning=FALSE,results='hide'}
-cases <- readRDS(paste0(opt$output_dir,"/2011_2015_mai_cases_adm.rds")) %>% 
-  bind_rows(readRDS(paste0(opt$output_dir,"/2016_2020_mai_cases_adm.rds"))) %>% 
-  subset(country == country_iso) %>%
-  distinct()
-
-library(xlsx)
-
-write.xlsx(cases%>% subset(admin_level=="ADM0") %>% mutate(Country = shapeName, `Mean annual incidece` = mean, `The lowest 5 percentile of the mean annual incidence` = q5, `The highest 95 percentile of the mean annual incidence`=q95) %>% select(Country,`Mean annual incidece`,`The lowest 5 percentile of the mean annual incidence`,`The highest 95 percentile of the mean annual incidence`) %>% data.frame(), file=paste0(country_iso,"_mean_annual_incidence.xlsx"), sheetName="Country", row.names=FALSE)
-
-write.xlsx(cases%>% subset(admin_level=="ADM1") %>% mutate(Admin1 = shapeName, `Mean annual incidece` = mean, `The lowest 5 percentile of the mean annual incidence` = q5, `The highest 95 percentile of the mean annual incidence`=q95) %>% select(Admin1,`Mean annual incidece`,`The lowest 5 percentile of the mean annual incidence`,`The highest 95 percentile of the mean annual incidence`) %>% data.frame(), file=paste0(country_iso,"mean_annual_incidence.xlsx"), sheetName="Admin1",  append=TRUE,row.names=FALSE)
-
-cases_adm2<-cases%>%subset(admin_level=="ADM2") %>% mutate(admin1=NA)
-cases_adm1<-cases%>%subset(admin_level=="ADM1") %>%
-  mutate(location_period_id=stringr::str_remove(location_period_id,paste0(country_iso,"-ADM1-"))) %>% 
-  mutate(location_period_id=stringr::str_remove(location_period_id,"_1"))
-
-for (row_idx in 1:nrow(cases_adm1)) {
-  cases_adm2[str_detect(cases_adm2$location_period_id,cases_adm1$location_period_id[row_idx]),]$admin1=cases_adm1$shapeName[row_idx]
-
-}
-
-write.xlsx(cases_adm2 %>% mutate(Admin1 = admin1,Admin2=shapeName, `Mean annual incidece` = mean, `The lowest 5 percentile of the mean annual incidence` = q5, `The highest 95 percentile of the mean annual incidence`=q95) %>% select(Admin1,Admin2,`Mean annual incidece`,`The lowest 5 percentile of the mean annual incidence`,`The highest 95 percentile of the mean annual incidence`) %>% data.frame(),file=paste0(country_iso,"_mean_annual_incidence.xlsx"), sheetName="Admin2",  append=TRUE,row.names=FALSE)
-
-```
