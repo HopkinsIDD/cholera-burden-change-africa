@@ -4,12 +4,13 @@ params:
   config: "/conifgs/.yml"
 output: 
   powerpoint_presentation:
-    reference_doc: template.pptx
+    reference_doc: Presentation1.pptx
 author: "Infectious Disease Dynamics Group at Johns Hopkins University"
 date: "`r paste('Last update',format(lubridate::ymd(Sys.Date()),'%d %b %y'))`"
 ---
 
 ```{r introduction slide, echo = FALSE,message=FALSE, warning=FALSE}
+
 config <- yaml::read_yaml(file = file.path(paste0(params$cholera_directory,"/",params$config)))
 
 load(paste0(params$cholera_directory,"/packages/taxdat/data/afr_sf.rda"))
@@ -55,7 +56,7 @@ opt_list <- list(
               default = "./Analysis/output/figures",
               help = "Output directory for figures"),
   make_option(opt_str = c("-f", "--bundle_filename"), type = "character",
-              default = "Analysis/output/data_bundle_for_figures_test.rdata", 
+              default = "/home/qulu/dev_update_postprocessing/Analysis/output/data_bundle_for_figures_test.rdata", 
               help = "Data bundle to avoid re-processing"),
   make_option(opt_str = c("-r", "--redo"), type = "logical",
               default = FALSE, 
@@ -78,96 +79,104 @@ sf::sf_use_s2(FALSE)
 
 ```
 
-
-## Introduction
-Our project aims to produce continent-wide maps of mean annual incidence of suspected cholera cases across Africa from 2011-2020.\
+# Unifying cholera data across countries in a common framework
+**Challenge**: Cholera surveillance data are difficult to interpret and vary across countries. No contemporary global or regional maps of incidence using a common framework exist.\
                                                                                                                                     
-The maps are based on publicly available data ([cholera-taxonomy.middle-distance.com](https://cholera-taxonomy.middle-distance.com/users/sign_in)) or confidential data that you, your colleagues, regional stakeholders, or other GTFCC partners contributed for research purposes. 
+We aimed to synthesize surveillance data and alerts from across Africa to produce **unified estimates and maps** of mean annual incidence of suspected cholera across Africa from 2011 through 2020.
 
-## Who will use these maps?
-We anticipate that the maps will be used by country and regional cholera control managers and stakeholders, GTFCC partners, donors, and researchers to understand the magnitude of burden and the spatial distribution of suspected cholera across Africa.
+# How were the maps created?
+The maps are based on publicly available data ([cholera-taxonomy.middle-distance.com](https://cholera-taxonomy.middle-distance.com/users/sign_in)) or confidential data that you, your colleagues, regional stakeholders, or other GTFCC partners contributed for research purposes.\
 
-## How will these maps be used?
-- To forecast potential OCV demand and number of people living at high risk of V. cholerae exposure
-- To identify potential priority areas for cholera control
-- To advocate for funding for national cholera plans and other cholera control activities
-- To summarize the epidemiologic situation of cholera in a country or region
-- To understand the stability of cholera burden hotspots over a 10-year period
+Statistical models were used to “average” spatially and temporally overlapping cholera case reports and “smooth” information across neighboring areas when surveillance data are lacking.
 
-## Why did we contact you?
-As an expert in cholera control for your region, we would like your help in verifying the accuracy of the maps we produced.\
+# Limitations of the model
+Maps are **subject to reporting biases** in cholera surveillance data and **limited by model assumptions** on how cases may be smoothed to neighboring areas. These figures and estimates reflect only **reported suspected cholera** in the region.
 
-We invite you to provide feedback on our modeled estimates, join us as a co-author on our manuscript about cholera burden in Africa from 2011-2020, and use the images in these slides for your own presentations about the epidemiologic situation of cholera in your region.\
+# Who will use these maps?
+We anticipate that the maps will be used by country and regional cholera control managers and stakeholders, GTFCC partners, donors, and researchers to understand the magnitude of burden and the spatial distribution of suspected cholera across Africa.\
 
-Please refer to our initial email and on how to provide your feedback on the figures and tables in this presentation. Email elizabeth.c.lee@jhu.edu for further questions. 
+**These estimates are NOT meant to replace official country data and analyses. They CAN serve as a supplemental data source for countries and allow for regional and continental-level analyses across a unified modeled dataset.**
 
-## Presentation Outline
-- **Part 1. Continent-wide maps** – These are the results that we will present in our manuscript.
-- **Part 2. Country-specific maps** – Please evaluate the accuracy of these figures in the feedback form.
-- **Part 3. Data Coverage in `r country_full_name`** – This summarizes the data we used in our model for your country.
-- **Part 4. Model Fit for `r country_full_name`**– This shows the robustness of the model fit for your country. 
+# How might these maps and maps be used by the country and regional authorities?
+## Together with official country data and local knowledge, these estimates can be used:
+- To summarize the ‘average’ epidemiologic situation over a historical period 
+- To provide historical context in the identification of priority areas for multisectoral cholera interventions (PAMIs) 
+- To provide visual aids and statistics to advocate for cholera prevention and control resources 
+- To understand the relationship between mean annual incidence and potential risk factors for cholera 
+
+# Presentation Outline
+- **Part 1. Continent-wide maps** – These unified Africa-wide estimates are the primary analysis.
+- **Part 2. Country-level maps for `r country_full_name`** – These estimates are zoomed into a single country to enable a more detailed review. These estimates will not be used for further analysis without additional engagement with country stakeholders.
+- **Part 3. Data Coverage in `r country_full_name`** – This summarizes the data used for modeling in the country.
+- **Part 4. Model Fit for `r country_full_name`**– This shows the robustness of the model fit in the country. 
+
+**For more information about the figures and tables in the following slides, please review the Notes attached to each slide.**
 
 # Part 1. Continent-wide maps
-## Figure 1. Distribution of mean annual incidence of suspected cholera cases, 2011-2020
+These unified Africa-wide estimates are the primary analysis. 
+
+# Figure 1. Mean annual incidence of suspected cholera, 2011-2020
 ```{r, cases maps, echo=FALSE,out.width="30%"}
 knitr::include_graphics(path = file.path(opt$continent_map_dir,'postprocessing_fig_1.png'))
 ```
 
 ::: notes
-Figure 1. Distribution of mean annual incidence cases between 2011-2020.
-This set of figures aim to show the distributions of mean annual cholera incidence cases in Africa across two modeling time periods (2011-2015 and 2016-2020), as well as the distributions of cholera incidence cases across different WHO regions in Africa.
+Figure 1. Mean annual incidence of suspected cholera in Africa from 2011-2020. These figures show the distributions of mean annual cholera incidence (cases per year) of suspected cases reported in Africa across two time periods (2011-2015 and 2016-2020). 
 
-A) Panel A shows the distributions of mean annual incidence cases (mean suspected cholera cases per year) in Africa from 2011-2015 (left) and 2016-2020 (right). Areas in grey have a mean of less than 1 case per year. Blue shaded areas represent large lakes in Africa. 
-
-B) Panel B shows the mean annual cholera incidence (cases per year) across 2011-2015 and 2016-2020 by different African regions, including Western Africa (blue), Central Africa (orange), Eastern Africa (pink) and Southern Africa (green). The error bars represent the 95% prediction interval (uncertainty) at the continent-wide mean annual cholera incidence cases.
+A) The bar charts display the distribution of mean annual cholera incidence by region in two time periods. Error bars represent the 95% prediction interval of the continent-wide mean annual cholera incidence. B) Continent-wide 20 km by 20 km gridded estimates of mean annual cholera incidence in two periods – 2016-2020 (left) and 2011-2015 (right). Areas in light gray had a mean of less than 1 case per year, while areas in dark grey were unmodeled. Areas in blue represent large waterbodies. 
 
 :::
 
-## Figure 2. Changes in mean annual incidence rate
+# Figure 2. Changes in mean annual incidence rate
 ```{r, incidence rate ratio maps, echo=FALSE,out.width="30%"}
 knitr::include_graphics(path = file.path(opt$continent_map_dir,'postprocessing_fig_2.png'))
 ```
 
 ::: notes
-Figure 2. Changes in mean annual incidence rate (cases per 100,000 per year)
-This set of figures aim to show the changes of mean annual incidence rate (mean suspected cholera cases per 100,000 per year) between 2011-2015 and 2016-2020 at the country and second-administrative levels. 
+Figure 2. Changes in mean annual incidence rate of suspected cholera in Africa from 2011-2020. 
 
-A) Panel A shows a scatterplot whose y-axis is the mean annual incidence rates in 2016-2020 and x-axis is the mean annual incidence rates in 2011-2015 by country (three-letter ISO country code), region(Western Africa (blue), Central Africa (orange), Eastern Africa (pink) and Southern Africa (green)) and continent (labeled as "SSA"). 
-
-B) Panel B shows the ratio of mean annual incidence rates in 2016-2020 relative to 2011-2015. Areas filled with red had higher mean rates in 2016-2020 compared to 2011-2015, and areas filled with blue had lower mean rates in 2016-2020 compared to 2011-2015. Areas filled with white had similar mean rates in 2016-2020 and 2011-2015. Areas outlined in red or blue showed statistically significant increases (red) or decreases (blue) of mean rates in 2016-2020 relative to 2011-2015. Areas outlined in grey represent non-significant differences.
+A) The dot plots display changes in mean annual incidence rate from 2011-2015 (open circle) to 2016-2020 (filled circle) at the continent-level (top panel), region-level (second panel), and country-level (four bottom panels). Arrows indicate the direction of change from 2011-2015 to 2016-2020, with red indicating increases and blue indicating decreases. Countries are ordered by decreasing 2016-2020 mean annual incidence rate within region-level panels. B) The continent-wide map shows the ratio of mean annual incidence rate in 2016-2020 relative to 2011-2015 at the second-level administrative unit (e.g., districts). Areas in red experienced an increase while areas in blue experienced a decrease. Areas in white had minimal change between the two periods. Districts outlined in red or blue showed statistically-significant differences, while areas outlined in grey had non-statistically-significant differences. The following countries were not eligible to have statistically significant differences due to limited data in at least one of the two periods: Ivory Coast, Djibouti, Ghana, Liberia, Rwanda, Senegal, Eswatini, and South Africa. 
 :::
 
-## Figure 3. Population at risk,  2016-2020
+# Figure 3. Population at risk,  2016-2020
 ```{r, risk category maps, echo=FALSE,out.width="30%"}
 knitr::include_graphics(path = file.path(opt$continent_map_dir,'postprocessing_fig_3.png'))
 ```
 
 ::: notes
-Figure 3. Population at risk, 2016-2020.
-This set of figures aim to show the population (number of people) living in areas according to incidence rate risk categories in 2016-2020 by region, and second-level administrative unit. There are six incidence rate risk categories from low to high risk, including <1 person per 100,000 population, 1-10 people per 100,000 population, 10-20 people  per 100,000 population, 20-50 per 100,000 population, 50-100 per 100,000 population, and >100 per 100,000 population. 
+Figure 3. Population at risk, 2016-2020. These figures show the number of people living in areas according to incidence rate risk categories by region and second-level administrative unit (e.g., districts) for the 2016-2020 period. There are six incidence rate risk categories from low to high risk: <1 person per 100,000 population, 1-10 people per 100,000 population, 10-20 people per 100,000 population, 20-50 per 100,000 population, 50-100 per 100,000 population, and >100 per 100,000 population. 
 
-A) Panel A shows the population living in the second-level administrative districts, where we have high confidence that at least 10% of the population or >100,000 people in 2020 are living in grid cells at or above a 2016-2020 mean annual incidence rate indicated by the risk category color (e.g., >100 per 100,000 population, >50-100 per 100,000 population, >20-50 per 100,000 population, etc). Different colors represent different African regions. 
-
-B) Panel B shows the distribution of district-level population living in a given incidence risk category across Africa. Regional population distributions are indicated by different colors. A district (administrative 2 level unit) sample was assigned to a given risk category if at least 10% of the population or >100,000 people in 2020 were living in grid cells with a 2016-2020 mean annual incidence rate indicated by the risk category label.
+A) The bar chart shows the distribution of the number of people living in districts of a different risk category in 2016-2020, colored by region. Error bars show the 95% credible interval of district population at risk across the continent. B) The continent-wide map shows the district-level assignment to incidence rate risk categories in 2016-2020. Darker red colors indicate higher risk categories. Grey represents districts with a risk category of <1 people per 100,000 population. Areas in blue represent large waterbodies. Only modeled areas are displayed. 
 
 :::
 
 
-## Figure 4 Stability of risk classification across 2011-2015 and 2016-2020
+# Figure 4. Ten-year risk classifications of cholera burden, 2011-2020
 ```{r, endemicity maps, echo=FALSE,out.width="30%"}
 knitr::include_graphics(path = file.path(opt$continent_map_dir,'postprocessing_fig_4.png'))
 ```
 
 ::: notes
-Figure 4. Stability of risk classification in Africa across 2011-2010
-This set of figures aim to show the stability of cholera risk classification of the second-level administrative districts across 2011-2015 and 2016-2020. There are four cholera risk categories, including “sustained high risk” (districts were assigned to a high risk category of >10 per 100,000 in both periods), “history of high risk” (districts were assigned to a high risk category of >10 per 100,000 in exactly one period), “sustained low risk” (districts were assigned to a low risk category of <1 per 100,000 in both periods), and “history of moderate risk” (districts had a moderate risk category of >1 and <10 per 100,000 in both periods or a moderate and low risk category in one period each).
+Figure 4. Ten-year risk classifications of cholera burden in Africa, 2011-2020. These figures show the 10-year risk categories of second-level administrative units (e.g., districts) across two 5-year periods of 2011-2015 and 2016-2020. There are four 10-year risk categories: “sustained high risk”, where districts were assigned to a high-risk category of >10 per 100,000 in both periods; “history of high risk”, where districts were assigned to a high risk category of >10 per 100,000 in exactly one period; “history of moderate risk”, where districts were in a moderate risk category of >1 and <10 per 100,000 in both periods or a moderate and low risk category in one period each; and “sustained low risk”, where districts were assigned to a low risk category of <1 per 100,000 in both periods. 
 
-A) Panel A shows the stability of cholera risk category for districts where we have high confidence in assigning them into high or low risk incidence rate categories across 2011-2015 and 2016-2020 periods.
-B) Panel B shows the 2020 population living in second-level administrative districts in a given high confidence stability category across 2011-2015 and 2016-2020 periods.
+A) The continent-wide map shows the district-level assignment to 10-year risk categories. On the left is a visual legend for how the four 10-year risk categories were defined. B) The bar chart shows the fraction of 2020 district populations living in 10-year risk categories by country. Countries are displayed in decreasing order by the sum of the sustained high risk and history of high risk fractions within region-level panels. 
 
 :::
 
-# Part 2. Focus on: `r country_full_name`
+# Figure 5. Association between 2022-2023 cholera occurrence and 10-year risk classifications for 2011-2020
+```{r, outbreak analysis, echo=FALSE,out.width="30%"}
+knitr::include_graphics(path = file.path(opt$continent_map_dir,'postprocessing_fig_5.png'))
+```
+
+::: notes
+Figure 5. Association between cholera occurrence in 2022-2023 and ten-year risk classifications of cholera burden in Africa for 2011-2020. 
+
+A) The continent-wide map displays the 10-year risk categories by second-level administrative unit (e.g., districts) overlaid with locations that reported at least one suspected or confirmed cholera case in 2022-2023 in public WHO and complementary country-level situation reports. B) The bar charts display the distribution of 10-year risk categories for districts with and without reported cholera cases in 2022-2023. Cholera occurrence not reported at the district-level is not shown. C) The bar charts display the distribution of 10-year risk categories for districts with and without reported cholera cases in 2022-2023 by region. Cholera occurrence not reported at the district-level is not shown. D) The line plot shows pooled model estimates of the probability of cholera occurrence in districts with the sustained low risk 10-year category (reference category) for the continent and by region. Bars indicate 95% credible intervals from 4000 posterior draws. E) The line plot shows the log-odds ratios of 2022-2023 cholera occurrence by 10-year risk category relative to the reference category for the continent and by region. Bars indicate 95% credible intervals from 4000 posterior draws. 
+
+:::
+
+# Part 2. Country-level maps for `r country_full_name`
+These estimates are zoomed into a single country to enable a more detailed review. These estimates will not be used for further analysis without additional engagement with country stakeholders. 
 
 ```{r, set up, echo=FALSE,message=FALSE,warning=FALSE,results='hide'}
 # Functions ---------------------------------------------------------------
@@ -551,10 +560,10 @@ country_adm1<-rgeoboundaries::gb_adm1(country = country_iso)%>% dplyr::select(ge
 
 ```
 
-## Figure 5. Mean annual incident cases: `r country_full_name`
+# Figure 6. Mean annual incidence of suspected cholera: `r country_full_name`
 ```{r, country-specific gridded case maps, echo=FALSE,message=FALSE,warning=FALSE,fig.width=10,fig.height=8,results='hide'}
 
-fig5 <- output_plot_map(sf_obj = grid_cases %>% 
+fig6 <- output_plot_map(sf_obj = grid_cases %>% 
                              sf::st_intersection(afr_sf%>%subset(country == country_iso)) %>% 
                              mutate(log10_cases = log10(mean),
                                     period = factor(period,levels = c("2016-2020","2011-2015"))),
@@ -571,26 +580,28 @@ fig5 <- output_plot_map(sf_obj = grid_cases %>%
     geom_sf(data=country_adm1,alpha=0,fill="white") +
   ggrepel::geom_label_repel(data = country_adm1, colour='black', fill=NA, alpha=0.75, ggplot2::aes(label = shapeName,geometry=geometry), stat = "sf_coordinates",  min.segment.length = 0,nudge_x = 0.5,nudge_y = 0.5,label.size = NA)
 
-ggsave(fig5,
-       file = "fig5.png",
+ggsave(fig6,
+       file = paste0(country_full_name,"_fig6.png"),
        width = 10,
        height = 6, 
        dpi = 300)
 ```
 
-```{r, figure5, echo=FALSE,out.width="30%"}
-knitr::include_graphics( "fig5.png")
+```{r, figure6, echo=FALSE,out.width="30%"}
+knitr::include_graphics( paste0(country_full_name,"_fig6.png"))
 ```
 
 ::: notes
-Figure 5. Distribution of mean annual incidence cases in `r country_full_name` between 2011-2020.
-This set of figures aim to show the distributions of mean annual cholera incidence cases in `r country_full_name` across two modeling time periods (2011-2015 (left) and 2016-2020 (right)).
+Figure 6. Mean annual incidence of suspected cholera in `r country_full_name` from 2011-2020. These figures show the 20 km by 20 km gridded estimates of mean annual cholera incidence (cases per year) of suspected cases reported across two time periods – 2016-2020 (left) and 2011-2015 (right). Areas in light gray had a mean of less than 1 case per year, while areas in dark grey were unmodeled. Areas in blue represent large lakes.
 
 :::
 
-## Figure 6. Incidence rate ratio from 2016-2020 to 2011-2015: `r country_full_name`
+# Figure 7. Incidence rate ratio from 2016-2020 to 2011-2015: `r country_full_name`
 ```{r, Country Scatterplot at admin 1, echo=FALSE, message=FALSE,warning=FALSE,fig.width=10,fig.height=5,results='hide'}
-
+mai_change_stats <- readRDS(str_glue("{opt$output_dir}/mai_ratio_stats.rds")) %>% 
+    st_drop_geometry() %>% 
+    as_tibble()
+  
 mai_adm2_change_stats <- mai_change_stats %>% 
   filter(admin_level == "ADM2") %>% 
   mutate(change_direction = case_when(
@@ -600,7 +611,7 @@ mai_adm2_change_stats <- mai_change_stats %>%
   ))
 
 
-fig6 <- mai_change_adm %>% 
+fig7 <- mai_change_adm %>% 
   subset(country == country_iso) %>% 
   inner_join(u_space_sf %>% sf::st_intersection(afr_sf%>%subset(country == country_iso)), .) %>%
   output_plot_map(sf_obj = .,
@@ -636,25 +647,22 @@ fig6 <- mai_change_adm %>%
   geom_sf(data=country_adm1,alpha=0,fill="white",colour='black')+
   ggrepel::geom_label_repel(data = country_adm1, colour='black', fill=NA, alpha=0.75, ggplot2::aes(label = shapeName,geometry=geometry), stat = "sf_coordinates",  min.segment.length = 0,nudge_x = 0.5,nudge_y = 0.5,label.size = NA)
 
-ggsave(fig6,
-       file = "fig6.png",
+ggsave(fig7,
+       file = paste0(country_full_name,"_fig7.png"),
        width = 10,
        height = 6, 
        dpi = 300)
 ```
 
-```{r, figure6, echo=FALSE,out.width="30%"}
-knitr::include_graphics( "fig6.png")
+```{r, figure7, echo=FALSE,out.width="30%"}
+knitr::include_graphics( paste0(country_full_name,"_fig7.png"))
 ```
 
 ::: notes
-Figure 6. Changes in mean annual incidence rate (cases per 100,000 per year) in `r country_full_name`
-This figure aims to show the changes of mean annual incidence rate (mean suspected cholera cases per 100,000 per year) between 2011-2015 and 2016-2020 at second-administrative levels in `r country_full_name`. 
-
-The colors represent the ratio of mean annual incidence rates in 2016-2020 relative to 2011-2015 in `r country_full_name`. Areas filled with red had higher mean rates in 2016-2020 compared to 2011-2015, and areas filled with blue had lower mean rates in 2016-2020 compared to 2011-2015. Areas filled with white had similar mean rates in 2016-2020 and 2011-2015. Areas outlined in red or blue showed statistically significant increases (red) or decreases (blue) of mean rates in 2016-2020 relative to 2011-2015. Areas outlined in grey represent non-significant differences.
+Figure 7. Changes in mean annual incidence rate of suspected cholera in `r country_full_name` from 2011-2020. The map shows the ratio of mean annual incidence rate (cases per 100,000 population per year) in 2016-2020 relative to 2011-2015 for second-level administrative units (e.g., districts). Areas in red experienced an increase while areas in blue experienced a decrease. Areas in white had minimal change between the two periods. Districts outlined in red or blue showed statistically-significant differences, while areas outlined in grey had non-statistically-significant differences. Note: the following countries were not eligible to have statistically significant differences due to limited data in at least one of the two periods: Ivory Coast, Djibouti, Ghana, Liberia, Rwanda, Senegal, Eswatini, and South Africa. 
 :::
 
-## Figure 7. Changes in mean annual incidence rate: `r country_full_name`
+# Figure 8. Changes in mean annual incidence rate: `r country_full_name`
 ```{r, 2A, echo=FALSE, message=FALSE,warning=FALSE, fig.height=5,fig.width=10,results='hide'}
 
 mai_adm1_changes <-  mai_adm_all %>% 
@@ -722,7 +730,8 @@ p_fig2A <- mai_adm1_changes %>%
 
 
 p_fig2A_continent <- combined_mai_changes %>% 
-  mutate(focus = ifelse(country == country_iso,TRUE,NA)) %>% 
+  mutate(focus = ifelse(country == country_iso,TRUE,NA),
+         region = ifelse(country == country_iso, "focus",as.character(region))) %>% 
   arrange(focus) %>% 
   ggplot(aes(x = log10(`2011-2015`*1e5), 
              y =  log10(`2016-2020`*1e5), 
@@ -741,7 +750,7 @@ p_fig2A_continent <- combined_mai_changes %>%
   scale_size_manual(values = c(6, 4, 2.5)) +
   scale_shape_manual(values = c(15, 17, 16)) +
   scale_alpha_manual(values = c(1, 1, .75)) +
-  scale_color_manual(values = c("black", colors_afro_regions())) +
+  scale_color_manual(values =  c(focus="black",colors_afro_regions())) +
   theme_bw() +
   guides(color = guide_legend("WHO regions")) +
   scale_x_continuous(limits = c(-1.1, 2.3),
@@ -762,29 +771,34 @@ p_fig2A_continent <- combined_mai_changes %>%
   guides(color = "none", size = "none", shape = "none", alpha = "none")
 
 ggsave(gridExtra::arrangeGrob(p_fig2A, p_fig2A_continent, ncol=2,widths = c(5,5)),
-       file = "fig7.png",
+       file = paste0(country_full_name,"_fig8.png"),
        width = 12,
-       height = 6, 
+       height = 6,
        dpi = 300)
 
 ```
 
-```{r, figure7, echo=FALSE,out.width="30%"}
-knitr::include_graphics( "fig7.png")
+```{r, figure8, echo=FALSE,out.width="30%"}
+knitr::include_graphics(paste0(country_full_name,"_fig8.png"))
 ```
 
 ::: notes
-Figure 7. Changes in mean annual incidence rate (cases per 100,000 per year) in `r country_full_name`
-This set of figures aim to show the changes of mean annual incidence rate (mean suspected cholera cases per 100,000 per year) between 2011-2015 and 2016-2020 at the country and first-administrative levels. The country labels are highlighted in blue across both figures.
-
-The left figure shows a scatterplot whose y-axis is the mean annual incidence rates in 2016-2020 and x-axis is the mean annual incidence rates in 2011-2015 by first-administrative units, and country in `r country_full_name`. 
-
-The right figure is the same as panel A in Figure 2, showing the change of mean annual incidence rate across 2011-2015 and 2016-2020 at the country, region and continent levels.
+Figure 8. Changes in mean annual incidence rate of suspected cholera in `r country_full_name` from 2011-2020. The scatterplots show the mean annual incidence rate (cases per 100,000 population per year) for 2016-2020 (y-axis) compared to 2011-2015 (x-axis) for first-level administrative units (e.g., provinces) in `r country_full_name` in the left panel and all countries and regions in Africa in the right panel. The country-level label for `r country_full_name` is shaded blue in both panels. In the right panel, country- and region-level points are shaded by region, and the point labeled “SSA” represents the continent-wide estimate. 
 :::
 
-## Figure 8. Second administrative level districts by incidence risk category: `r country_full_name`
+# Figure 9. Incidence risk category by district: `r country_full_name`
 ```{r, 3A, echo = FALSE,message=FALSE,warning=FALSE,fig.width=10,fig.height=8,results='hide'}
-fig8 <- risk_pop_adm2 %>% 
+#load endemicity 50% cutoff
+  risk_pop_50_adm2 <- combine_period_output(prefix_list = prefix_list,
+                                            output_name = "risk_categories_50",
+                                            output_dir = opt$output_dir) %>% 
+    filter(admin_level == "ADM2"|(admin_level == "ADM1" & country == "LSO")) %>% 
+    get_AFRO_region(ctry_col = "country")  %>% 
+    mutate(AFRO_region = factor(AFRO_region, 
+                                levels = get_AFRO_region_levels())) %>% 
+    st_drop_geometry()
+
+fig9 <- risk_pop_50_adm2 %>% 
   subset(country == country_iso) %>% 
   mutate(period = factor(period,levels = c("2016-2020","2011-2015"))) %>% 
   inner_join(u_space_sf, .) %>% 
@@ -803,8 +817,8 @@ fig8 <- risk_pop_adm2 %>%
 
 
 
-ggsave(fig8,
-       file = "fig8.png",
+ggsave(fig9,
+       file = paste0(country_full_name,"_fig9.png"),
        width = 10,
        height = 6, 
        dpi = 300)
@@ -812,35 +826,32 @@ ggsave(fig8,
 ```
 
 
-```{r, figure8, echo=FALSE,out.width="30%"}
-knitr::include_graphics( "fig8.png")
+```{r, figure9, echo=FALSE,out.width="30%"}
+knitr::include_graphics( paste0(country_full_name,"_fig9.png"))
 ```
 
 ::: notes
-Figure 8. Population at risk, 2016-2020, in `r country_full_name`.
-This set of figures aim to show the population (number of people) living in areas according to incidence rate risk categories in 2016-2020 by second-level administrative unit. There are six incidence rate risk categories from low to high risk, including <1 person per 100,000 population, 1-10 people per 100,000 population, 10-20 people  per 100,000 population, 20-50 per 100,000 population, 50-100 per 100,000 population, and >100 per 100,000 population. 
-
-The left and right figure shows the distribution of second-level administrative district population living in a given incidence risk category across`r country_full_name` in 2011-2015 and 2016-2020 respectively. A district (second-level administrative unit) sample was assigned to a given risk category if at least 10% of the population or >100,000 people in 2020 were living in grid cells with a 2016-2020 mean annual incidence rate indicated by the risk category label. The names of first-level administrative units are also shown in the maps.
+Figure 9. Incidence risk category by district in `r country_full_name` from 2011-2020. These figures show the assignment of second-level administrative unit (e.g., districts) to incidence rate risk categories in 2016-2020 (left) and 2011-2015 (right). There are six incidence rate risk categories from low to high risk: <1 person per 100,000 population, 1-10 people per 100,000 population, 10-20 people per 100,000 population, 20-50 per 100,000 population, 50-100 per 100,000 population, and >100 per 100,000 population. Darker red colors indicate higher risk categories. Grey represents districts with a risk category of <1 people per 100,000 population. Areas in blue represent large waterbodies. Only modeled areas are displayed. 
 
 :::
 
-## Figure 9. Population by incidence risk category and time period
+# Figure 10. Population at risk: `r country_full_name`
 ```{r, 3B, echo=FALSE,message=FALSE,warning=FALSE, results='hide'}
 risk_pop_all_1115 <- readRDS(paste0(opt$output_dir,"/2011_2015_pop_at_risk.rds")) %>% 
-  filter(admin_level == "ADM2") %>% 
+  filter(admin_level == "ADM2" | (admin_level == "ADM1" & country == "LSO")) %>% 
   select(country,risk_cat, mean, q2.5, q97.5) %>%
   subset(country==country_iso) %>% 
   mutate(time_period = '2011-2015')
 
 risk_pop_all_1620 <- readRDS(paste0(opt$output_dir,"/2016_2020_pop_at_risk.rds")) %>% 
-  filter(admin_level == "ADM2") %>% 
+  filter(admin_level == "ADM2" | (admin_level == "ADM1" & country == "LSO")) %>% 
   select(country,risk_cat, mean, q2.5, q97.5) %>%
   subset(country==country_iso) %>% 
   mutate(time_period = '2016-2020')
 
 risk_pop_all <- bind_rows(risk_pop_all_1620,risk_pop_all_1115)
 
-fig9 <- risk_pop_all %>% 
+fig10 <- risk_pop_all %>% 
   arrange(factor(time_period, levels = c("2016-2020","2011-2015"))) %>% 
   ggplot(aes(y = risk_cat, x = mean, fill= time_period)) +
   geom_bar( stat = "identity", width = .5,position = "dodge")+
@@ -851,8 +862,8 @@ fig9 <- risk_pop_all %>%
   labs(y = "Incidence risk category \n(incidence cases per 100,000 population)", x = "ADM2 population at risk [millions]",fill='Time period')
 
 
-ggsave(fig9,
-       file = "fig9.png",
+ggsave(fig10,
+       file = paste0(country_full_name,"_fig10.png"),
        width = 8,
        height = 6, 
        dpi = 300)
@@ -860,16 +871,16 @@ ggsave(fig9,
 ```
 
 
-```{r, figure9, echo=FALSE,out.width="30%"}
-knitr::include_graphics( "fig9.png")
+```{r, figure10, echo=FALSE,out.width="30%"}
+knitr::include_graphics( paste0(country_full_name,"_fig10.png"))
 ```
 
 ::: notes
-Figure 9. Population by incidence risk category and time perio in `r country_full_name`.
-This figures aims to show the population (millions) living in each incidence risk category (incidence cases per 100,000 population). The color represents different time periods (2011-2015 (red) and 2016-2020 (blue)).
+Figure 10. Population at risk in `r country_full_name`, 2011-2020.
+The bar chart shows the number of people living in second-level administrative units (e.g., districts) with different incidence rate risk categories for the 2011-2015 and 2016-2020 periods. There are six incidence rate risk categories from low to high risk: <1 person per 100,000 population, 1-10 people per 100,000 population, 10-20 people per 100,000 population, 20-50 per 100,000 population, 50-100 per 100,000 population, and >100 per 100,000 population. Error bars display the 95% credible interval. 
 :::
 
-## Table 1. Number of people at the second administrative level in `r country_full_name` living in different cholera risk categories per time period
+# Table 1. Population at risk: `r country_full_name`
 ```{r, 3B table, echo=FALSE,message=FALSE,warning=FALSE}
 
 risk_pop_all %>% 
@@ -880,21 +891,20 @@ risk_pop_all %>%
   arrange(factor(risk_cat,levels=c(">100","50-100","20-50","10-20","1-10","<1"))) %>% 
   rename(
     "Risk category (per 100,000 population)" = risk_cat,
-    "Mean Number [millions] (95% prediction interval) 2016-2020" = `2016-2020`,
-    "Mean Number [millions] (95% prediction interval) 2011-2015" = `2011-2015`
+    "Mean Number [millions] (95% credible interval) 2016-2020" = `2016-2020`,
+    "Mean Number [millions] (95% credible interval) 2011-2015" = `2011-2015`
   ) %>% 
   knitr::kable( format = "simple")
 
 ```
 
 ::: notes
-Table 1. Number of people at the second administrative level in  `r country_full_name` living in different cholera risk categories per time period.
-This table summarizes the data in Figure 9 which aims to show the population (millions) living in each incidence risk category (incidence cases per 100,000 population). The color represents different time periods (2011-2015 (red) and 2016-2020 (blue)).
+Table 1. Population at risk in `r country_full_name`, 2011-2020. The table summarizes the number of people living in second-level administrative units (e.g., districts) with different incidence rate risk categories for the 2011-2015 and 2016-2020 periods. This data matches what is shown in Figure 10.
 :::
 
-## Figure 10. Stability of risk classification across 2011-2015 to 2016-2020
+# Figure 11. Cholera occurrence in 2022-2023 and 10-year risk classifications for 2011-2020: `r country_full_name`
 ```{r, 3C, message=FALSE,warning=FALSE,fig.width=5,fig.height=5,echo=FALSE,results='hide'}
-endemicity_df_v2 <- risk_pop_adm2 %>% 
+endemicity_df_v2 <- risk_pop_50_adm2 %>% 
   mutate(high_risk = risk_cat %in% get_risk_cat_dict()[3:6],
          low_risk = risk_cat %in% get_risk_cat_dict()[1]) %>% 
   group_by(country, location_period_id) %>% 
@@ -916,8 +926,16 @@ endemicity_df_v2 <- risk_pop_adm2 %>%
                                         "sustained low risk"))) %>% 
   subset(country == country_iso)
 
-# Figure
-fig10 <- endemicity_df_v2 %>% 
+# Load outbreak data and results
+load(str_c(opt$output_dir, "/outbreak_analysis_data.rdata"))
+load(str_c(opt$output_dir, "/recent_cholera_outbreaks_res.rdata"))
+
+
+final_joins <- final_joins %>% 
+  mutate(admin_level = str_c("ADM", admin_level)) %>% 
+  filter(country==country_iso)
+
+fig11_A <- endemicity_df_v2 %>% 
   inner_join(u_space_sf, .) %>% 
   output_plot_map(sf_obj = .,
                   lakes_sf = lakes_sf %>% sf::st_intersection(afr_sf%>%subset(country == country_iso)),
@@ -925,34 +943,94 @@ fig10 <- endemicity_df_v2 %>%
                   fill_var = "endemicity",
                   fill_color_scale_type = "endemicity",
                   border_width = .03) +
-  theme(legend.position = "bottom") +
-  guides(fill = guide_legend("Endemicity")) + 
+  theme(legend.position = 'right') +
+    geom_sf(inherit.aes = FALSE,
+          data = final_joins,
+          aes(color = "locations with\nreported cholera\nin 2022-2023"),
+          alpha = 0, #col = "purple",
+          lwd = 1) +
+geom_sf(inherit.aes = FALSE,
+          data = st_centroid(final_joins %>% select(-geom.y)),
+          alpha = 1, col = "purple",
+          fill = "white",
+          pch = 21,
+          size = .6,
+          stroke = .2) +
+  scale_colour_manual (values = c('purple')) +
+  labs(color = NULL) +
+  guides(fill = guide_legend("10-year risk\ncategory")) + 
   geom_sf(data=country_adm1,alpha=0,fill="white",colour='black')+
   ggrepel::geom_label_repel(data = country_adm1, colour='black', fill=NA, alpha=0.75, ggplot2::aes(label = shapeName,geometry=geometry), stat = "sf_coordinates",  min.segment.length = 0,nudge_x = 0.5,nudge_y = 0.5,label.size = NA)
 
+pd2 <- position_dodge(.3)
+fig11_B <- param_by_country %>% 
+  subset(country == country_iso & !param == "(Intercept)") %>% 
+  ggplot(aes(x = param, y = mean, ymin = q2.5, ymax = q97.5)) +
+  geom_point(position = pd2) +
+  geom_errorbar(width = 0, position = pd2) +
+  geom_hline(aes(yintercept = 0), lty = 3, lwd = .6) +
+  #facet_grid(. ~ what, scales = "free", space = "free") +
+  theme_bw() +
+  #scale_color_manual(values = c("overall" = "black", taxdat::colors_afro_regions())) +
+  labs(x = "", y = "log-Odds ratio", color = NULL) +
+  theme(legend.position = "bottom",
+        legend.key.height = unit(.75, units = "lines"),
+        axis.text = element_text(size = 8),
+        axis.title = element_text(size = 10),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 6))
 
-ggsave(fig10,
-       file = "fig10.png",
-       width = 10,
+
+fig11 <- plot_grid(
+  fig11_A,
+  fig11_B,
+  nrow = 1,
+  labels = "auto",
+  rel_widths = c(1, 0.5)
+) +
+  theme(panel.background = element_rect(fill = "white", color = "white"))
+
+
+ggsave(fig11,
+       file = paste0(country_full_name,"_fig11.png"),
+       width = 18,
        height = 6, 
        dpi = 300)
 
 ```
 
 
-```{r, figure10, echo=FALSE,out.width="30%"}
-knitr::include_graphics( "fig10.png")
+```{r, figure11, echo=FALSE,out.width="30%"}
+knitr::include_graphics( paste0(country_full_name,"_fig11.png"))
 ```
 
 ::: notes
-Figure 10. Stability of risk classification in  `r country_full_name` across 2011-2010
-This set of figures aim to show the stability of cholera risk classification of the second-level administrative districts across 2011-2015 and 2016-2020 in  `r country_full_name`. There are four cholera risk categories, including “sustained high risk” (districts were assigned to a high risk category of >10 per 100,000 in both periods), “history of high risk” (districts were assigned to a high risk category of >10 per 100,000 in exactly one period), “sustained low risk” (districts were assigned to a low risk category of <1 per 100,000 in both periods), and “history of moderate risk” (districts had a moderate risk category of >1 and <10 per 100,000 in both periods or a moderate and low risk category in one period each). The color shows the stability of cholera risk category for districts where we have high confidence in assigning them into high or low risk incidence rate categories across 2011-2015 and 2016-2020 periods. The names of first-level administrative units are also shown in the maps.
+Figure 11. Association between cholera occurrence in 2022-2023 and ten-year risk classifications of cholera burden in `r country_full_name` for 2011-2020. 
+
+A) The country-level map displays the 10-year risk categories by second-level administrative unit (e.g., districts) overlaid with locations that reported at least one suspected or confirmed cholera case in 2022-2023 in public WHO and complementary country-level situation reports (purple outline). B) The line plot shows the log-odds ratios of 2022-2023 cholera occurrence by 10-year risk category relative to the reference category of sustained low risk for the country. Bars indicate 95% credible intervals from 4000 posterior draws. 
+:::
+
+# Table 2. Population living in districts by 10-year risk category: `r country_full_name`
+```{r, 4B table, echo=FALSE,message=FALSE,warning=FALSE}
+endemicity_df_v2 %>% 
+  group_by(endemicity) %>% 
+  summarise(`Total population (millions)` = round(sum(pop)/10^6,2)) %>% 
+  rename(
+    `10-year risk categories` = endemicity
+  ) %>% 
+  knitr::kable( format = "simple")
+
+```
+
+::: notes
+Table 2. Population living in districts by 10-year risk category for 2011-2020 in `r country_full_name`. The table shows the number of people living in second-level administrative units (e.g., districts) with different 10-year risk categories. 
 
 :::
 
 # Part 3. Data coverage in `r country_full_name`
+This section summarizes the data used for modeling in the country.
 
-## Figure 11. Country-specific data coverage map across 2011-2015 to 2016-2020
+# Figure 12. Data coverage in `r country_full_name`, 2011-2020
 ```{r, data coverage map, echo=FALSE, message=FALSE, warning=FALSE,fig.width=10,fig.height=5,results='hide'}
 
 p_figCov_1115<- readRDS(paste0(opt$output_dir,"/2011_2015_shapefiles.rds")) %>% 
@@ -989,28 +1067,26 @@ p_figCov_1620<- readRDS(paste0(opt$output_dir,"/2016_2020_shapefiles.rds")) %>%
 
 
 
-png("fig11.png",width = 2000,height = 1000, res = 300)
+png(paste0(country_full_name,"_fig12.png"),width = 2000,height = 1000, res = 300)
 lemon::grid_arrange_shared_legend(p_figCov_1620, p_figCov_1115, ncol=2)
 dev.off()
 
 ```
 
 
-```{r, figure11, echo=FALSE,out.width="30%"}
-knitr::include_graphics( "fig11.png")
+```{r, figure12, echo=FALSE,out.width="30%"}
+knitr::include_graphics( paste0(country_full_name,"_fig12.png"))
 ```
 
 ::: notes
-Figure 11. Data coverage map across 2011-2015 to 2016-2020 in `r country_full_name`. 
-
-These figures show the smallest administrative level (color) where at least one observation was reported in 2011-2015 (left) and 2016-2020 (right).
+Figure 12. Data coverage for `r country_full_name` in 2011-2020. The maps show the smallest administrative level (color) where at least one observation was reported in 2016-2020 (left) and 2011-2015 (right). The zero-level administrative unit is the country-level. 
 :::
 
-## Table 2. Number of data points by year for `r country_full_name`
+# Table 3. Number of observations in `r country_full_name`, 2011-2020
 ```{r, stan input,echo=FALSE,message=FALSE,warning=FALSE}
 obs<- readRDS(paste0(opt$output_dir,"/2011_2015_obs.rds")) %>% 
   bind_rows(readRDS(paste0(opt$output_dir,"/2016_2020_obs.rds")))
-obs%>%
+table3 <- obs%>%
   subset(country == country_iso) %>% 
   mutate(
          year= lubridate::year(ref_TL)) %>% 
@@ -1018,16 +1094,87 @@ obs%>%
   summarize(total_obs = as.character(n())) %>% 
   pivot_wider(values_from = c("total_obs"),
               names_from = "admin_level",
-              values_fill = "0") %>% 
+              values_fill = "0")
+if(ncol(table3) == 4) {
+  if(all(colnames(table3) %in% c("year","0","1","2"))){
+  table3 %>% 
   select(year,`0`,`1`,`2`) %>% 
   knitr::kable(col.names = c("Year","National level","First-level administrative units","Second-level administrative units"),
                format = "simple")
+  } else  if(all(colnames(table3) %in% c("year","0","2","3"))){
+  table3 %>% 
+  select(year,`0`,`2`,`3`) %>% 
+  knitr::kable(col.names = c("Year","National level","Second-level administrative units","Third-level administrative units"),
+               format = "simple")
+  }
+} else if(ncol(table3) == 3){
+  
+  if(all(colnames(table3) %in% c("year","0","1"))){
+    table3 %>% 
+      select(year,`0`,`1`) %>% 
+      knitr::kable(col.names = c("Year","National level","First-level administrative units"),
+               format = "simple")    
+  } else if(all(colnames(table3) %in% c("year","0","2"))){
+    table3 %>% 
+      select(year,`0`,`2`) %>% 
+      knitr::kable(col.names = c("Year","National level","Second-level administrative units"),
+               format = "simple")    
+  } else if(all(colnames(table3) %in% c("year","1","2"))){
+    table3 %>% 
+      select(year,`1`,`2`) %>% 
+      knitr::kable(col.names = c("Year","First-level administrative units","Second-level administrative units"),
+               format = "simple")    
+  } else if(all(colnames(table3) %in% c("year","2","3"))){
+    table3 %>% 
+      select(year,`2`,`3`) %>% 
+      knitr::kable(col.names = c("Year","Second-level administrative units","Third-level administrative units"),
+               format = "simple")    
+  } 
+
+} else if(ncol(table3) == 2){
+  
+    if(all(colnames(table3) %in% c("year","0"))){
+    table3 %>% 
+      select(year,`0`) %>% 
+      knitr::kable(col.names = c("Year","National level"),
+               format = "simple")    
+  } else if(all(colnames(table3) %in% c("year","1"))){
+    table3 %>% 
+      select(year,`1`) %>% 
+      knitr::kable(col.names = c("Year","First-level administrative units"),
+               format = "simple")    
+  } else if(all(colnames(table3) %in% c("year","2"))){
+    table3 %>% 
+      select(year,`2`) %>% 
+      knitr::kable(col.names = c("Year","Second-level administrative units"),
+               format = "simple")    
+  } else if(all(colnames(table3) %in% c("year","3"))){
+    table3 %>% 
+      select(year,`3`) %>% 
+      knitr::kable(col.names = c("Year","Third-level administrative units"),
+               format = "simple")    
+  } 
+} else if(ncol(table3) == 6){
+    table3 %>% 
+    select(year,`0`,`1`,`2`,`3`,`4`) %>% 
+    knitr::kable(col.names = c("Year","National level","First-level administrative units","Second-level administrative units","Third-level administrative units","Fourth-level administrative units"),
+              format = "simple")
+} else if(ncol(table3) == 5){
+    table3 %>% 
+    select(year,`0`,`1`,`2`,`3`) %>% 
+    knitr::kable(col.names = c("Year","National level","First-level administrative units","Second-level administrative units","Third-level administrative units"),
+              format = "simple")
+} else if(ncol(table3) == 8){
+    table3 %>% 
+    select(year,`0`,`1`,`2`,`3`,`4`,`5`,`6`) %>% 
+    knitr::kable(col.names = c("Year","National level","First-level administrative units","Second-level administrative units","Third-level administrative units","Fourth-level administrative units","Fifth-level administrative units","Sixth-level administrative units"),
+              format = "simple")
+}
 
 ```
 
 ::: notes
-Table 2. Number of data points by year for `r country_full_name`
-This table summarizes the number of data points (observations) for each year covered by national, first-level administrative units and second-level administrative units.
+Table 3. Number of observations by year for `r country_full_name`. The table summarizes the number of data points (observations) for each year for national-level, first-level administrative units, and second-level administrative units that informed the burden estimates. 
 :::
 
 
@@ -1035,19 +1182,24 @@ This table summarizes the number of data points (observations) for each year cov
 public_oc <- read.csv('/home/cholerapipelinerestmp/OC_modeled.csv') %>% filter(country == country_iso & public)
 ```
 
-## Publicly available data input
+# Publicly available data input
 
-The detailed information about the publicly available data input can be found on our public [cholera taxonomy database website](https://cholera-taxonomy.middle-distance.com/observation_collections). Here is a list of unique identifiers for the publicly available data input:\
+The detailed information about the publicly available data input can be found on our public [cholera taxonomy database website](https://cholera-taxonomy.middle-distance.com/observation_collections). Here is a list of unique identifiers (OC UID) for the publicly available data input:\
 
-"`r paste(sort(public_oc$OC_UID),collapse = ',')`"
+"`r paste(sort(public_oc$OC_UID),collapse = ', ')`"
+
+::: notes
+Find more information about these datasets on the cholera taxonomy database by typing the number into the OC UID search bar in the top right of the website.
+:::
 
 # Part 4. Model Fit for `r country_full_name`
+This section shows the robustness of the model fit in the country.
 
-## Figure 12. Observed cases versus modeled cases across 2011-2015 and 2016-2020
+# Figure 13. Observed versus modeled cases for 2011-2020
 
 ```{r, validation plot, echo=FALSE, message=FALSE, warning=FALSE,fig.width=10,fig.height=5,results='hide'}
 
-fig12<- gen_obs %>% 
+fig13<- gen_obs %>% 
   filter(censoring == "full", country ==country_iso) %>% 
   group_by(admin_level, period, loctime_comb) %>% 
   mutate(mean_obs = mean(observation)) %>% 
@@ -1063,21 +1215,19 @@ fig12<- gen_obs %>%
   labs(x = "Mean full observed number of cases", y = "Modeled")
 
 
-ggsave(fig12,
-       file = "fig12.png",
+ggsave(fig13,
+       file = paste0(country_full_name,"_fig13.png"),
        width = 10,
        height = 6, 
        dpi = 300)
 ```
 
 
-```{r, figure12, echo=FALSE,out.width="30%"}
-knitr::include_graphics( "fig12.png")
+```{r, figure13, echo=FALSE,out.width="30%"}
+knitr::include_graphics( paste0(country_full_name,"_fig13.png"))
 ```
 
 
 ::: notes
-Figure 12. Observed cases versus modeled cases across 2011-2015 and 2016-2020. 
-
-Model validation for full (not time-censored) observations at the country, admin 1, and admin 2 level for the two periods on the log scale. Modeled case estimates show the mean (point) and 95% prediction interval (line). The model fits the  data well if the prediction interval crosses the one-to-one diagonal line for 95% of the observations.”
+Figure 13. Observed versus modeled cases in `r country_full_name` for 2011-2015 and 2016-2020. The scatterplots show model validation plots for full observations (non-time-censored observations) for observations reported at the national-level, first-level administrative units, and second-level administrative units on the log 10 scale. Modeled case estimates display the mean (point) and 95% credible interval (line). Modeled estimates are thought to fit the observation data well if the 95% credible interval crosses the one-to-one diagonal line (red dashed line) for 95% of the observations. 
 :::
